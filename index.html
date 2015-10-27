@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Uber & Taxi Predictor in NYC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/slider.css">
+    <link rel="stylesheet" href="css/nouislider.css">
+    <link rel="stylesheet" href="css/nouislider.pips.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.js"></script> 
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="js/slider.js"></script>
+    <script src="js/nouislider.js"></script>
+
+<!-- Material Design for Bootstrap CSS -->
+    <link href="/bootstrap-material-design/dist/css/roboto.min.css" rel="stylesheet"> 
+    <link href="/bootstrap-material-design/dist/css/material-fullpalette.css" rel="stylesheet">
+    <link href="/bootstrap-material-design/dist/css/ripples.min.css" rel="stylesheet">
+
+    <!-- Dropdown.js -->
+    <link href="/css/jquery.dropdown.css" rel="stylesheet">
+
+        <!-- Material Design for Bootstrap -->
+    <script src="/bootstrap-material-design/dist/js/material.js"></script>
+    <script src="/bootstrap-material-design/dist/js/ripples.js"></script>
+    <!-- Dropdown.js -->
+    <script src="js/jquery.dropdown.js"></script>
+
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+      }
+      .dropdownjs > ul {
+        transition: none;
+        margin-top: 3em;
+        width: 50px;
+        }
+
+    </style>
+
+  </head>
+  <body>
+                <div class="navbar navbar-material-light-blue-300">
+                <div class="navbar-header">
+                  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-material-light-blue-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </button>
+                  <a class="navbar-brand" href="javascript:void(0)">Uber & Taxi Predictor</a>
+                </div>
+                <div class="navbar-collapse collapse navbar-material-light-blue-collapse">
+                  <ul class="nav navbar-nav">
+                    <li style="display:block;line-height: 20px;padding: 10px 15px; width:160px">
+                      <select id="seasonSelect" class="form-control" placeholder="Spring" style="width:120px"> 
+                        <option style="width:50px" value="Spring">Spring</option>
+                        <option style="width:50px" value="Summer">Summer</option>
+                        <option style="width:50px" value="Fall">Fall</option>
+                        <option style="width:50px" value="Winter">Winter</option>
+                      </select>    
+                    </li>
+
+                    <li style="display:block;line-height: 20px;padding: 10px 15px; width:160px">
+                      <select id="dayOfWeekSelect" class="form-control" placeholder="Wednesday" style="width:100px"> 
+                        <option style="width:100px" value="Monday">Monday</option>
+                        <option style="width:100px" value="Tuesday">Tuesday</option>
+                        <option style="width:100px" value="Wednesday">Wednesday</option>
+                        <option style="width:100px" value="Thursday">Thursday</option>
+                        <option style="width:100px" value="Friday">Friday</option>
+                        <option style="width:100px" value="Saturday">Saturday</option>
+                        <option style="width:100px" value="Sunday">Sunday</option>
+                      </select>    
+                    </li>
+                    
+                    <li style="display:block;line-height: 20px;padding: 10px 15px; width:160px">
+                      <select id="timeOfDaySelect" class="form-control" placeholder="Wednesday" style="width:100px"> 
+                        <option style="width:100px" value="Morning">Morning</option>
+                        <option style="width:100px" value="Afternoon">Afternoon</option>
+                        <option style="width:100px" value="Evening">Evening</option>
+                        <option style="width:100px" value="Night">Night</option>
+                      </select>    
+                    </li>
+                    
+                   <!--<li><a href="javascript:void(0)">AngieSpot This is a very long bar gooooo</a></li> -->
+
+                  </ul>
+                  <ul class="nav navbar-nav" style="width:30em; ">
+                  <div id="pips-positions">
+                  </div>
+                  </ul>
+               
+                </div>
+              </div>
+
+
+
+  <div class="slider clearfix">
+    <input type="hidden" name="DispenseROPTrigger" value="8" />
+    <!--<span class="progress-tip left">Calculated ROP</span> -->
+    <!--<span class="progress-tip right">Manual Order</span> -->
+    <label data-value="8">2009</label>
+    <label data-value="7">2010</label>
+    <label data-value="6">2011</label>
+    <label data-value="5">2012</label>
+    <label data-value="4">2013</label>
+    <label data-value="3">2014</label>
+    <label data-value="2">2015</label>
+    <label data-value="1">2016</label>
+    <label data-value="0">2017</label>
+  </div>
+  
+  <div class="status">
+    <label>value: <span id="value"></span></label>
+    <label>index: <span id="index"></span></label>
+  </div>
+
+<script> 
+var pipsPositions = document.getElementById('pips-positions');
+
+noUiSlider.create(pipsPositions, {
+  range: {'min':2007,
+  'max':2017
+  },
+  start: 2007,
+  step: 1,
+  tooltips: true,
+  pips: {
+    mode: 'count',
+    values: 11,
+    density:100,
+  }
+});
+
+pipsPositions.noUiSlider.on('update', function(){
+  console.log("nouislider slid to " + pipsPositions.noUiSlider.get());
+  //pipsPositions.setAttribute('disabled', true);
+
+});
+
+</script>
+    <div id="map"></div>
+    <script>
+
+// This example creates circles on the map, representing populations in North
+// America.
+
+// First, create an object containing LatLng and population for each city.
+var citymap = {
+  chicago: {
+    center: {lat: 41.878, lng: -87.629},
+    population: 2714856
+  },
+  newyork: {
+    center: {lat: 40.714, lng: -74.005},
+    population: 8405837
+  },
+  losangeles: {
+    center: {lat: 34.052, lng: -118.243},
+    population: 3857799
+  },
+  vancouver: {
+    center: {lat: 49.25, lng: -123.1},
+    population: 603502
+  }
+};
+
+
+function initMap() {
+  // Create the map.
+  // NYC is 40.7127° N, 74.0059° W
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 10,
+    center: {lat: 40.7127, lng: -74.0059},
+    mapTypeId: google.maps.MapTypeId.TERRAIN
+    /*   zoom: 4,
+    center: {lat: -28, lng: 137} */
+  });
+/*)
+  // Construct the circle for each value in citymap.
+  // Note: We scale the area of the circle based on the population.
+  for (var city in citymap) {
+    // Add the circle for this city to the map.
+    var cityCircle = new google.maps.Circle({
+      strokeColor: '#FF0000',
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillColor: '#FF0000',
+      fillOpacity: 0.35,
+      map: map,
+      center: citymap[city].center,
+      radius: Math.sqrt(citymap[city].population) * 100/20
+    });
+  }
+ */
+  map.data.loadGeoJson('GoogleJSON.JSON');
+  //map.data.loadGeoJson('https://storage.googleapis.com/maps-devrel/google.json');
+
+}
+
+    </script>
+    <script>
+      $.material.init();
+    </script>
+        <script>
+      $("#dropdown-menu select").dropdown();
+      $("#seasonSelect").dropdown();
+      $("#dayOfWeekSelect").dropdown();
+      $("#timeOfDaySelect").dropdown();      
+    </script>
+
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5i6iEYccqxNL8KnHoZhWfeUM72U91jVc&signed_in=true&callback=initMap"></script>
+  </body>
+</html>
